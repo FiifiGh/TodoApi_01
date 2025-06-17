@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Category(models.Model):
-    name = models.models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     
     def __str__(self):
         return self.name
@@ -12,11 +12,12 @@ class Category(models.Model):
 
 class Todo(models.Model):
     
-    STATUS_TYPES = [
-        'PENDING',
-        'IN PROGRESS',
-        'COMPLETED'
-    ]
+    STATUS_TYPES = {
+        'pending':'PENDING',
+        'in progress': 'IN PROGRESS',
+        'completed ':'COMPLETED'
+        }
+    
     
     title = models.CharField(max_length=50)
     description = models.TextField()
