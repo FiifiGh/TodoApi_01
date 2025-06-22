@@ -22,7 +22,7 @@ class Todo(models.Model):
     description = models.TextField()
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    completed_at = models.DateTimeField(blank=True)
+    completed_at = models.DateTimeField(null=True)
     status = models.CharField(choices=StatusTypes.choices, default= StatusTypes.PENDING)
     
     

@@ -8,3 +8,19 @@ class CategorySerializer(serializers.ModelSerializer):
             'id',
             'name'
             )
+        
+        
+class TodoSerializer(serializers.ModelSerializer):
+    category = CategorySerializer(read_only = True)
+    class Meta:
+        model = Todo
+        fields = [
+            'id',
+            'title',
+            'description',
+            'category',
+            'created_at',
+            'completed_at',
+            'status', 
+        ]
+    
