@@ -3,6 +3,7 @@ from .models import Category, Todo
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status as http_status
+from rest_framework.validators import ValidationError
 from datetime import datetime
  
 # Create your views here.
@@ -93,10 +94,17 @@ def todo(request):
 
 @api_view(['PUT'])
 def todo_update(request, pk):
+    query_param = str(request.query_params.get('status')).upper()
+    print(query_param)
     try:
         task = Todo.objects.get(id=pk)
-        task.status = Todo.StatusTypes.COMPLETED
-        task.completed_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f %z')    
+        if query_param == Todo.StatusTypes.IN_PROGRESS.upper():
+            task.status = Todo.StatusTypes.IN_PROGRESS
+        elif query_param == Todo.StatusTypes.COMPLETED.upper():
+             task.status = Todo.StatusTypes.COMPLETED
+             task.completed_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f %z')  
+        else:
+            raise ValidationError('status must be In Progress or Completed')
         task.save()
         return Response({'message': 'success'}, status=http_status.HTTP_200_OK)
     except Todo.DoesNotExist:
@@ -104,6 +112,15 @@ def todo_update(request, pk):
                 {'message': 'Todo not found'},
             status=http_status.HTTP_404_NOT_FOUND,
         )
+    
+    except ValidationError as e:
+        return Response(
+            {
+                'message': e.detail[0]
+            },
+            status=http_status.HTTP_400_BAD_REQUEST
+        )
+    
     except Exception as e:
         return Response({'message': str(e)}, status=http_status.HTTP_500_INTERNAL_SERVER_ERROR)
             
