@@ -24,11 +24,11 @@ def category_add(request):
         return Response ({
             'message': 'Category created',
         },
-        status=status.HTTP_201_CREATED)
+        status=http_status.HTTP_201_CREATED)
     except Exception as e:
         return Response({
             'message': str(e)
-        }, status=status.HTTP_400_BAD_REQUEST)
+        }, status=http_status.HTTP_400_BAD_REQUEST)
     
 @api_view(['POST', 'GET',])
 def todo(request):
@@ -96,12 +96,12 @@ def todo_update(request, pk):
         task = Todo.objects.get(id=pk)
         task.status = Todo.StatusTypes.COMPLETED
         task.save()
-        return Response({'message': 'success'}, status=status.HTTP_200_OK)
+        return Response({'message': 'success'}, status=http_status.HTTP_200_OK)
     except task.DoesNotExist:
         return Response(
                 {'message': 'Todo not found'},
-            status=status.HTTP_404_NOT_FOUND,
+            status=http_status.HTTP_404_NOT_FOUND,
         )
     except Exception as e:
-        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'message': str(e)}, status=http_status.HTTP_500_INTERNAL_SERVER_ERROR)
             
