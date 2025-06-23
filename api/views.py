@@ -3,6 +3,7 @@ from .models import Category, Todo
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status as http_status
+from datetime import datetime
  
 # Create your views here.
 
@@ -95,9 +96,10 @@ def todo_update(request, pk):
     try:
         task = Todo.objects.get(id=pk)
         task.status = Todo.StatusTypes.COMPLETED
+        task.completed_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f %z')    
         task.save()
         return Response({'message': 'success'}, status=http_status.HTTP_200_OK)
-    except task.DoesNotExist:
+    except Todo.DoesNotExist:
         return Response(
                 {'message': 'Todo not found'},
             status=http_status.HTTP_404_NOT_FOUND,
